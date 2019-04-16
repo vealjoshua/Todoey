@@ -12,6 +12,8 @@ class TodoListViewController: UITableViewController {
     
     var itemArray: [String] = ["Buy almond milk", "Workout", "Go to class"]
     
+    let defaults: UserDefaults = UserDefaults.standard
+    
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         var textField: UITextField = UITextField()
@@ -21,7 +23,10 @@ class TodoListViewController: UITableViewController {
         let action: UIAlertAction = UIAlertAction(title: "Add Item", style: .default) { (action) in
             
             if textField.text != nil {
+                
                 self.itemArray.append(textField.text!)
+                
+                self.defaults.set(self.itemArray, forKey: "TodoListArray")
                 
                 self.tableView.reloadData()
             }
@@ -44,6 +49,10 @@ class TodoListViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
     }
 
     //MARK - Tableview Datasource Methods
